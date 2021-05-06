@@ -1,6 +1,7 @@
 'use stricit';
 let container = document.getElementById('sealesProfile');
 let tabelEL = document.createElement('table');
+let forms=[];
 let hours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
 let sealesLocationArry = [];
 function sealesLocation(locationName, minCust_H, maxCust_H, avgCookies_Cust) {
@@ -69,9 +70,27 @@ function header() {
     tabelheaderEL.appendChild(thEL15);
 }
 
+let salesform=document.getElementById('sales');
+salesform.addEventListener("submit",submit);
+function submit(event)
+{
+event.preventDefault();
+let locationName=event.target.StoreName.value;
+let minCust_H=event.target.MinimumOrder.value;
+let maxCust_H=event.target.MaximumOrder.value;
+let avgCookies_Cust=event.target.AvargeSales.value;
+let newlocation= new sealesLocation(locationName,minCust_H,maxCust_H,avgCookies_Cust);
+newlocation.getCookies_H();
+newlocation.render();
+// sealesLocationArry.push(this);
+console.log(sealesLocationArry);
+tablefooterEL.innerHTML='';
+ footer();
+}
+let tablefooterEL = document.createElement('tr');
 function footer()
  {
-    let tablefooterEL = document.createElement('tr');
+    
     tabelEL.appendChild(tablefooterEL);
     let thf = document.createElement('td');
     thf.textContent = 'totals';
@@ -81,7 +100,7 @@ function footer()
         let total1=0;
         let tdf1 = document.createElement('td');
         tablefooterEL.appendChild(tdf1);
-        for (let j=0;j<5;j++)
+        for (let j=0;j<sealesLocationArry.length;j++)
         {
             total1 += sealesLocationArry[j].Cookiesph[i] ;
             tdf1.textContent=total1; 
@@ -91,11 +110,12 @@ function footer()
     let tdf2=document.createElement('td');
     tablefooterEL.appendChild(tdf2);
     let sumx=0;
-    for (let j=0;j<5;j++)
+    for (let j=0;j<sealesLocationArry.length;j++)
 {
-    sumx=sumx+(sealesLocationArry[j].sumTotal);
+    sumx=sumx+sealesLocationArry[j].sumTotal;
 }
 tdf2.textContent=sumx;}
+
 header();
 let Seattle = new sealesLocation('Seattle', 23, 65, 6.3);
 Seattle.render();
@@ -111,5 +131,6 @@ Paris.render();
 
 let lima = new sealesLocation('Lima', 2, 16, 4.6);
 lima.render();
-footer();
 
+
+footer()
